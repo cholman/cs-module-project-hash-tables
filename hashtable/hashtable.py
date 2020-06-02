@@ -22,6 +22,9 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+        self.size = 0
+        self.buckets = [None] * self.capacity
 
 
     def get_num_slots(self):
@@ -34,6 +37,7 @@ class HashTable:
 
         Implement this.
         """
+        return self.capacity
         # Your code here
 
 
@@ -62,6 +66,10 @@ class HashTable:
 
         Implement this, and/or FNV-1.
         """
+        hash = 5381
+        for x in key:
+            hash = (( hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFFF
         # Your code here
 
 
@@ -81,6 +89,9 @@ class HashTable:
 
         Implement this.
         """
+        slot = self.hash_index(key)
+        self.size += 1
+        self.buckets[slot] = HashTableEntry(key, value)
         # Your code here
 
 
@@ -93,6 +104,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.put(key, None)
+        self.size -= 1
 
 
     def get(self, key):
@@ -104,6 +117,13 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        slot = self.hash_index(key)
+        hash_entry = self.buckets[slot]
+        if hash_entry is not None:
+            return hash_entry.value
+        return None
+
+
 
 
     def resize(self, new_capacity):
